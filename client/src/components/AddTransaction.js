@@ -10,9 +10,13 @@ export const AddTransaction = () => {
   const [{contract, accounts}, dispatch] = useStore();
 
   const [isTransactionInProcess, setTransactionInprocess] = useState(false);
+  const [isTransactionSuccessful , setTransactionSuccessful] = useState(true);
+  const [transactionError , setTransactionError] = useState("");
 
   const onSubmit = async(e) => {
     e.preventDefault();
+    setTransactionSuccessful(true);
+    setTransactionError("");
     try {
         setTransactionInprocess(true)
         const newTransaction = {
@@ -22,14 +26,19 @@ export const AddTransaction = () => {
         }
         await addTransactionAsync(contract, accounts,newTransaction, dispatch);
         setTransactionInprocess(false);
+        setTransactionSuccessful(true);
     }catch (error){
+        console.log("error trax = ",error);
         setTransactionInprocess(false);
+        setTransactionSuccessful(false);
+        setTransactionError(error.message);
     }
   }
 
   return (
     <>
       <h3>Add new transaction {isTransactionInProcess && <img width="40px" src={Loader} />}</h3>
+      {!isTransactionSuccessful && <div style={{color:"red"}}>{transactionError}</div>}
       <form onSubmit={onSubmit}>
         <div className="form-control">
           <label htmlFor="text">Text</label>

@@ -8,6 +8,8 @@ const initialState = {
   web3: null,
   accounts: [],
   contract: null,
+  web3LoadingErrorMessage:"",
+  web3Loadded: false
 }
 
 // Create context

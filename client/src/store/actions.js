@@ -32,3 +32,10 @@ export const addEthereumAccounts = (accounts) => {
         payload: accounts
     };
 }
+
+export const web3LoadingError = (errorMessage) => {
+    return {
+        type: 'WEB3_LOADING_ERROR',
+        errorMessage: errorMessage
+    };
+}

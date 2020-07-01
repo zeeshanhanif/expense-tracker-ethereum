@@ -2,9 +2,9 @@ import React, { useEffect, useState } from 'react'
 import { useStore } from '../context/GlobalState';
 
 export const EthAccountInfo = () => {
-    const [{web3,accounts}, dispatch] = useStore();
+    const [{web3,accounts,web3LoadingErrorMessage,web3Loadded}, dispatch] = useStore();
     const [accountBalance, setAccountBalance] = useState(0);
-    console.log("In eth account = ",web3);
+    //console.log("In eth account = ",web3);
 
     useEffect(()=>{
         (async ()=>{
@@ -24,14 +24,18 @@ export const EthAccountInfo = () => {
                     <span>Balance: </span><span>{accountBalance} Ether</span>
                 </div>);
         }
+        else if(!web3 && web3LoadingErrorMessage && !web3Loadded) {
+            return <div style={{color: "red"}}>{web3LoadingErrorMessage}</div>
+        }
         else {
-            return <div>Loading Web3 and Account Details</div>
+            return <div style={{color: "red"}}>Loading Web3 and Account Details</div>
         }
     }
 
     return (
         <div className="eth-account-info-container">
             <div>Your Ethereum Account Details</div>
+            <hr/>
             {
                 accountDisplay()
             }

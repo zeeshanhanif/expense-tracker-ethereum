@@ -13,7 +13,9 @@ export default (state, action) => {
       case 'SETUP_WEB3':
         return {
           ...state,
-          web3: action.payload
+          web3: action.payload,
+          web3LoadingErrorMessage: "",
+          web3Loadded: true
         }
       case 'SETUP_CONTRACT':
         return {
@@ -24,6 +26,12 @@ export default (state, action) => {
         return {
           ...state,
           accounts: action.payload
+        }
+      case 'WEB3_LOADING_ERROR':
+        return {
+          ...state,
+          web3LoadingErrorMessage: action.errorMessage,
+          web3Loadded: false
         }
       default:
         return state;
