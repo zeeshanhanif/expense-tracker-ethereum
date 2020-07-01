@@ -21,18 +21,11 @@ jobs:
       uses: actions/setup-node@v2-beta
       with:
         node-version: 12
-    
-    - name: Directory
-      run: pwd
-      
-    - uses: borales/actions-yarn@v2.0.0
-      with: 
-        cmd: install
-
+    - name: Install Web Packages
+      run: npm install
     - name: Build App
-      run: yarn build
-
+      run: npm run build
     - name: Install Surge
-      run: yarn global add surge
+      run: npm install -g surge
     - name: Run Surge
       run: surge ./build expense-tracker-ethereum.surge.sh --token ${{secrets.SURGE_TOKEN}}
