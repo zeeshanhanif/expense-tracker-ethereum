@@ -5,18 +5,19 @@ export const AddTransaction = () => {
   const [text, setText] = useState('');
   const [amount, setAmount] = useState(0);
 
-  const { addTransaction } = useContext(GlobalContext);
+  const { addTransaction, addTransactionAsync } = useContext(GlobalContext);
 
   const onSubmit = e => {
     e.preventDefault();
 
     const newTransaction = {
       id: Math.floor(Math.random() * 100000000),
-      text,
+      transactionDescription : text,
       amount: +amount
     }
 
-    addTransaction(newTransaction);
+    //addTransaction(newTransaction);
+    addTransactionAsync(newTransaction);
   }
 
   return (

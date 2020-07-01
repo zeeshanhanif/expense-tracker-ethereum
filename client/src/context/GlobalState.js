@@ -1,10 +1,12 @@
 import React, { createContext, useReducer, useEffect } from 'react';
 import AppReducer from './AppReducer';
 import Web3 from 'web3';
+import { EXPENSE_TRACKER_ABI, EXPENSE_TRACKER_ADDRESS } from '../contract/ExpenseTrackerContract';
 // Initial state
 const initialState = {
   transactions: [],
-  web3: null
+  web3: null,
+  contract: null,
 }
 
 // Create context
@@ -20,24 +22,29 @@ export const GlobalProvider = ({ children }) => {
 
   async function loadBlockchain(){
     try {
-        console.log("web3 = ",window.web3);
-        console.log("ethereum = ",window.ethereum);
         console.log("Web3.givenProvider = ",Web3.givenProvider);
-        console.log("window.web3.currentProvider = ",window.web3.currentProvider);
-        console.log("window.ethereum.enable = ",window.ethereum.enable);    
-        //const web3 = new Web3(window.ethereum);
         const web3 = new Web3(Web3.givenProvider);
-        console.log("Web3.givenProvider.enable = ",Web3.givenProvider.enable);
         await Web3.givenProvider.enable();
-
         setupWeb3(web3);
-        //await window.ethereum.enable();
-        //console.log("web3 instance = ",web3);
-        //const accounts = await web3.eth.getAccounts();
-        //console.log("web3 accounts1 = ",accounts);
+        const contract = new web3.eth.Contract(EXPENSE_TRACKER_ABI,EXPENSE_TRACKER_ADDRESS);
+        setupContract(contract);
+        console.log("contract = ",contract);
+        console.log("contract.methods = ",contract.methods);
+        let transactionCount = await contract.methods.transactionCount().call();
+        console.log("transaction count = ",transactionCount);
+        for(var i=0;i<transactionCount;i++){
+            const {amount,transactionDescription,transactionOwner} = await contract.methods.transaction(i).call();
+            let transactionObj = {
+                amount:parseInt(amount),
+                transactionDescription,
+                transactionOwner
+            }
+            console.log("trascations == ",transactionObj);
+            addTransaction(transactionObj);
+        }
         
-        //const balance = await web3.eth.getBalance(accounts[0]);
-        //console.log("  111 Balance = ",web3.utils.fromWei(balance,"ether"));
+
+
     }
     catch(error){
         console.log("Error in loading Web3 = ",error);
@@ -54,6 +61,14 @@ export const GlobalProvider = ({ children }) => {
     });
   }
 
+  async function addTransactionAsync(transaction){
+    const {web3, contract } = state;
+    const account = await web3.eth.getAccounts();
+    console.log("before transaction");
+    const receipt =  await contract.methods.addTransaction(transaction.transactionDescription, transaction.amount).send({from : account[0]});
+    console.log("after  transaction ", receipt);
+    addTransaction(transaction);
+  }
   function addTransaction(transaction) {
     dispatch({
       type: 'ADD_TRANSACTION',
@@ -68,11 +83,20 @@ export const GlobalProvider = ({ children }) => {
     });
   }
 
+  function setupContract(contract) {
+    dispatch({
+      type: 'SETUP_CONTRACT',
+      payload: contract
+    });
+  }
+
   return (<GlobalContext.Provider value={{
     transactions: state.transactions,
     web3: state.web3,
+    contract: state.contract,
     deleteTransaction,
-    addTransaction
+    addTransaction,
+    addTransactionAsync
   }}>
     {children}
   </GlobalContext.Provider>);
