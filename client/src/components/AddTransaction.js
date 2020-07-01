@@ -36,7 +36,7 @@ export const AddTransaction = () => {
 
   return (
     <>
-      <h3>Add new transaction {isTransactionInProcess && <img width="40px" src={Loader} />}</h3>
+      <h3>Add new transaction {isTransactionInProcess && <img width="40px" src={Loader} alt="Loading..." />}</h3>
       {!isTransactionSuccessful && <div style={{color:"red"}}>{transactionError}</div>}
       <form onSubmit={onSubmit}>
         <div className="form-control">
