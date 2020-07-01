@@ -2,7 +2,7 @@ import React, { useEffect, useState } from 'react'
 import { useStore } from '../context/GlobalState';
 
 export const EthAccountInfo = () => {
-    const [{web3,accounts,web3LoadingErrorMessage,web3Loadded}, dispatch] = useStore();
+    const [{web3,accounts,web3LoadingErrorMessage,web3Loadded}] = useStore();
     const [accountBalance, setAccountBalance] = useState(0);
     //console.log("In eth account = ",web3);
 

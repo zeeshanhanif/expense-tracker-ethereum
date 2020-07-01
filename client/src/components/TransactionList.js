@@ -4,7 +4,7 @@ import { Transaction } from './Transaction';
 import { useStore } from '../context/GlobalState';
 
 export const TransactionList = () => {
-    const [{transactions}, dispatch] = useStore();
+    const [{transactions}] = useStore();
 
   return (
     <>

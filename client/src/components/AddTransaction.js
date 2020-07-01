@@ -2,7 +2,6 @@ import React, { useState } from 'react'
 import { useStore } from '../context/GlobalState';
 import { addTransactionAsync } from '../store/asyncActions';
 import Loader from '../images/loader.gif'
-import Loader2 from '../images/loader2.gif'
 
 export const AddTransaction = () => {
   const [text, setText] = useState('');

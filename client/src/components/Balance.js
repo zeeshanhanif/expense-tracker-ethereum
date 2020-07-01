@@ -2,7 +2,7 @@ import React from 'react';
 import { useStore } from '../context/GlobalState';
 
 export const Balance = () => {
-  const [{transactions}, dispatch] = useStore();
+  const [{transactions}] = useStore();
 
   const amounts = transactions.map(transaction => transaction.amount);
 
