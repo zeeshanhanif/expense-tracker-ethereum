@@ -1,8 +1,8 @@
-import React, { useContext } from 'react';
-import { GlobalContext } from '../context/GlobalState';
+import React from 'react';
+import { useStore } from '../context/GlobalState';
 
 export const IncomeExpenses = () => {
-  const { transactions } = useContext(GlobalContext);
+  const [{transactions}, dispatch] = useStore();
 
   const amounts = transactions.map(transaction => transaction.amount);
 
@@ -19,13 +19,13 @@ export const IncomeExpenses = () => {
   return (
     <div className="inc-exp-container">
         <div>
-          <h4>Income</h4>
-  <p className="money plus">{income}</p>
+            <h4>Income</h4>
+            <p className="money plus">{income}</p>
         </div>
         <div>
-          <h4>Expense</h4>
-  <p className="money minus">{expense}</p>
+            <h4>Expense</h4>
+            <p className="money minus">{expense}</p>
         </div>
-      </div>
+    </div>
   )
 }

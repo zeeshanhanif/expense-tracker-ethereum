@@ -20,6 +20,11 @@ export default (state, action) => {
           ...state,
           contract: action.payload
         }
+      case 'ADD_ETHEREUM_ACCOUNTS':
+        return {
+          ...state,
+          accounts: action.payload
+        }
       default:
         return state;
     }

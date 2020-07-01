@@ -1,28 +1,35 @@
-import React, {useState, useContext} from 'react'
-import { GlobalContext } from '../context/GlobalState';
+import React, { useState } from 'react'
+import { useStore } from '../context/GlobalState';
+import { addTransactionAsync } from '../store/asyncActions';
+import Loader from '../images/loader.gif'
+import Loader2 from '../images/loader2.gif'
 
 export const AddTransaction = () => {
   const [text, setText] = useState('');
   const [amount, setAmount] = useState(0);
+  const [{contract, accounts}, dispatch] = useStore();
 
-  const { addTransaction, addTransactionAsync } = useContext(GlobalContext);
+  const [isTransactionInProcess, setTransactionInprocess] = useState(false);
 
-  const onSubmit = e => {
+  const onSubmit = async(e) => {
     e.preventDefault();
-
-    const newTransaction = {
-      id: Math.floor(Math.random() * 100000000),
-      transactionDescription : text,
-      amount: +amount
+    try {
+        setTransactionInprocess(true)
+        const newTransaction = {
+          //id: Math.floor(Math.random() * 100000000),
+          transactionDescription : text,
+          amount: +amount
+        }
+        await addTransactionAsync(contract, accounts,newTransaction, dispatch);
+        setTransactionInprocess(false);
+    }catch (error){
+        setTransactionInprocess(false);
     }
-
-    //addTransaction(newTransaction);
-    addTransactionAsync(newTransaction);
   }
 
   return (
     <>
-      <h3>Add new transaction</h3>
+      <h3>Add new transaction {isTransactionInProcess && <img width="40px" src={Loader} />}</h3>
       <form onSubmit={onSubmit}>
         <div className="form-control">
           <label htmlFor="text">Text</label>
@@ -35,7 +42,12 @@ export const AddTransaction = () => {
           >
           <input type="number" value={amount} onChange={(e) => setAmount(e.target.value)} placeholder="Enter amount..." />
         </div>
-        <button className="btn">Add transaction</button>
+        {
+            isTransactionInProcess ?
+            <div className="btn">Transaction in Process.....</div> :
+            <button className="btn">Add transaction</button>
+        }
+        
       </form>
     </>
   )
