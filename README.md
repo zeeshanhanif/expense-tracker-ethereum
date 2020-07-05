@@ -1,6 +1,7 @@
 # expense-tracker-ethereum
 Expense Tracker App with React on Client Side and Ethereum Blockchain
 
+### In this Step 2, we have improved state management in redux style with createContext and useReducer hooks
 
 1) Setup Ethereum Project with Truffle
 2) Created Basic initial Contract
@@ -9,5 +10,3 @@ Expense Tracker App with React on Client Side and Ethereum Blockchain
 5) Used Web3 to connect client with blockchain
 6) Called contract functions with web3 and updated UI
 7) Used basic React Context for state management
-
-### Note: In Step 2 we will improve the state management of React
